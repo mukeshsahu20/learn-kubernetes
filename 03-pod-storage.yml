@@ -14,6 +14,6 @@ spec:
       volumeMounts:
         - mountPath: /mnt
           name: html
-  volumes:
+  volumes:              #using common storage here & using mount in line 9 & 14
     - name: html
       emptyDir: {}
