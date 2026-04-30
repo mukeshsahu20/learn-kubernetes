@@ -9,7 +9,7 @@ spec:
       volumeMounts:
         - mountPath: /mnt/html
           name: html
-  container:
+  containers:
     - name: nginx
       image: nginx
       volumeMounts:
