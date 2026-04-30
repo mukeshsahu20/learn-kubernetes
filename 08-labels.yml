@@ -1,0 +1,20 @@
+# labels for any resources , Not just pods
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-demo-sidecar
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: html
+    - name:  debug
+      image: docker.io/rkalluru/learnk8s:side-car-html-generator
+      volumeMounts:
+        - mountPath: /mnt/html
+          name: html
+  volumes:              #using common storage here & using mount in line 9 & 14
+    - name: html
+      emptyDir: {}

@@ -1,0 +1,13 @@
+# labels for any resources , Not just pods
+apiVersion: v1
+kind: Pod
+metadata:
+  name: annotation-demo
+  annotations:
+    imageregistry: "https://hub.docker.com"
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.14.2
+      ports:
+        - containerPort: 80
