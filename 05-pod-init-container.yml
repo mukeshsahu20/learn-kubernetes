@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pod-demo-storage
+  name: pod-inti-container
 spec:
   intiContainers:
     - name:  debug
@@ -17,4 +17,4 @@ spec:
           name: html
   volumes:              #using common storage here & using mount in line 9 & 14
     - name: html
-      emptyDir: {}uru/learnk8s:rhel9-bare
+      emptyDir: {}
