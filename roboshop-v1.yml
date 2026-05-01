@@ -31,9 +31,9 @@ spec:
         containers:
           - name: frontend
             image: public.ecr.aws/w8x4g9h7/roboshop-v3/frontend
-      envFrom:
-        - configMapRef:
-            name: frontend
+            envFrom:
+             - configMapRef:
+               name: frontend
 
 ---
 apiVersion: apps/v1
