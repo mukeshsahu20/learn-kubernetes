@@ -36,6 +36,13 @@ spec:
                  name: frontend
 
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalogue
+data:
+  CATALOGUE_HOST: localhost
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -53,7 +60,20 @@ spec:
         containers:
           - name: catalogue
             image: public.ecr.aws/w8x4g9h7/roboshop-v3/catalogue
+            envFrom:
+              - configMapRef:
+                  name: catalogue
+
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cart
+data:
+  CATALOGUE_HOST: "catalogue"
+  CATALOGUE_PORT: "8080"
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -71,6 +91,17 @@ spec:
         containers:
           - name: cart
             image: public.ecr.aws/w8x4g9h7/roboshop-v3/cart
+            envFrom:
+              - configMapRef:
+                  name: cart
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shipping
+data:
+  CART_ENDPOINT: "localhost:8080"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -89,6 +120,24 @@ spec:
         containers:
           - name: shipping
             image: public.ecr.aws/w8x4g9h7/roboshop-v3/shipping
+            envFrom:
+              - configMapRef:
+                  name: shipping
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment
+data:
+  data:
+    CART_HOST: "cart"
+    CART_PORT: "8080"
+    USER_HOST: "catalogue"
+    USER_PORT: "8080"
+    AMQP_HOST: "rabbitmq-dev.rdevopsb83.online"
+    AMQP_USER: "roboshop"
+    AMQP_PASS: "roboshop123"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -107,4 +156,38 @@ spec:
         containers:
           - name: payment
             image: public.ecr.aws/w8x4g9h7/roboshop-v3/payment
+            envFrom:
+              - configMapRef:
+                  name: payment
+
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user
+data:
+  CATALOGUE_HOST: localhost
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: user
+  template:
+    metadata:
+      labels:
+        component: user
+    spec:
+      containers:
+        - name: user
+          image: public.ecr.aws/w8x4g9h7/roboshop-v3/user
+          envFrom:
+            - configMapRef:
+                name: user
 ---
