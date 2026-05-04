@@ -32,5 +32,16 @@ spec:
       image: docker.io/rkalluru/learnk8s:rhel9-bare
 
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-node-port
+spec:
+  selector:
+    appName: nginx
+  ports:
+    - port: 80         # service port
+      targetPort: 80  # nginx pod port
 
 
