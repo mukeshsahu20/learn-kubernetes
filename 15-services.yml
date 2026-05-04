@@ -18,8 +18,18 @@ spec:
   selector:
     appName: nginx
   ports:
-    - port: 80
-      targetPort: 80
+    - port: 80         # service port
+      targetPort: 80  # nginx pod port
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug
+spec:
+  containers:
+    - name: debug
+      image: docker.io/rkalluru/learnk8s:rhel9-bare
 
 
 
