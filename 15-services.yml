@@ -38,6 +38,7 @@ kind: Service
 metadata:
   name: nginx-node-port
 spec:
+  type: NodePort
   selector:
     appName: nginx
   ports:
