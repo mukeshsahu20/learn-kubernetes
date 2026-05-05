@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: frontend
 data:
-  CATALOGUE_HOST: localhost
+  CATALOGUE_HOST: frontend
   CATALOGUE_PORT: "8080"
   USER_HOST: localhost
   USER_PORT: "8080"
@@ -41,7 +41,7 @@ kind: ConfigMap
 metadata:
   name: catalogue
 data:
-  CATALOGUE_HOST: localhost
+  CATALOGUE_HOST: catalogue
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -191,3 +191,58 @@ spec:
             - configMapRef:
                 name: user
 ---
+# create Service for Roboshop
+# this service is load balancer so commented
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: nginx-node-port
+#spec:
+#  type: Loadbalancer
+#  selector:
+#    component: frontend
+#  ports:
+#    - port: 80         # service port
+#      targetPort: 80  # nginx pod port
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalogue
+spec:
+  type: ClusterIP
+  selector:
+    component: catalogue
+  ports:
+    - port: 8080         # service port
+      targetPort: 8080  # nginx pod port
+
+
+---
+
+# JOB to download schema for Mongodb server
+# will not runt his job but this is a example for jobs
+#apiVersion: batch/v1
+#kind: Job
+#metadata:
+#  name: catalogue-schema
+#spec:
+#  template:
+#    spec:
+#      containers:
+#        - name: schema-load
+#          image: public.ecr.aws/w8x4g9h7/roboshop-v3/schema-load
+#          env:
+#            - name: DB_TYPE
+#              value: mongo
+#            - name: APP_GIT_URL
+#              value: https://github.com/roboshop-devops-project-v3/catalogue
+#            - name: DB_HOST
+#              value: mongodb-dev.rdevopsb83.online
+#            - name: SCHEMA_FILE
+#              value: db/master-data.js
+#      restartPolicy: Never
+#  backoffLimit: 4
